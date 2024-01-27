@@ -1,0 +1,5 @@
+*.txt
+*.so*
+*.a
+example
+*.o
