@@ -2,8 +2,11 @@ CC=cc
 CFLAGS=-O0 -g
 COBJS=ttc-log.o
 TARGET_VERSION=0.1
-TARGET=ttc-log.so.$(TARGET_VERSION)
+TARGET_NAME=ttc-log.so
+TARGET=$(TARGET_NAME).$(TARGET_VERSION)
 TARGET_STATIC=ttc-log.a
+
+DESTDIR=/usr/local
 
 all: $(TARGET) $(TARGET_STATIC)
 
@@ -18,6 +21,15 @@ $(TARGET_STATIC): $(COBJS)
 $(TARGET): $(COBJS)
 	@echo $(CC) $@
 	$(CC) $(CFLAGS) -shared -o $(TARGET) $(COBJS)
+
+install: $(TARGET) $(TARGET_STATIC)
+	install -m 755 $(TARGET) $(DESTDIR)/lib/lib$(TARGET)
+	install -m 755 $(TARGET_STATIC) $(DESTDIR)/lib/lib$(TARGET_STATIC)
+	ln -s $(DESTDIR)/lib/lib$(TARGET) $(DESTDIR)/lib/lib$(TARGET_NAME)
+	install -m 644 ttc-log.h $(DESTDIR)/include/ttc-log.h
+
+uninstall:
+	rm $(DESTDIR)/lib/lib$(TARGET_NAME) $(DESTDIR)/lib/lib$(TARGET_STATIC) $(DESTDIR)/include/ttc-log.h $(DESTDIR)/lib/lib$(TARGET) 
 
 clean:
 	@echo cleaning directory...
