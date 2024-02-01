@@ -55,8 +55,6 @@ void ttc_log_init_from_file(FILE *fp) {
 	ttc_log_cfg.fp = fp;
 }
 
-
-
 int ttc_log(ttc_log_level level, const char *file,
 		uint32_t line, const char *fmt, ...) {
 	va_list args;
@@ -67,6 +65,7 @@ int ttc_log(ttc_log_level level, const char *file,
 	if(ttc_log_cfg.fp) {
 		fprintf(ttc_log_cfg.fp, "%s %s(%d):", ttc_log_get_level_str(level), file, line);
 		res = vfprintf(ttc_log_cfg.fp, fmt, args);
+		fflush(ttc_log_cfg.fp);
 	}
 	va_end(args);
 
